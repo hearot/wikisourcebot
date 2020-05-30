@@ -84,80 +84,83 @@ func main() {
 	bot.Handle(tb.OnQuery, func(q *tb.Query) {
 		splitString := strings.SplitN(q.Text, " ", 2)
 
+		var client *mwclient.Client
+
+		found := false
+		lowerText := strings.ToLower(splitString[0])
+
+		search := ""
+
 		if len(splitString) > 1 {
-			var client *mwclient.Client
+			search = splitString[1]
+		}
 
-			found := false
-			lowerText := strings.ToLower(splitString[0])
-			search := splitString[1]
-
-			for _, lang := range langs {
-				if lang == lowerText {
-					client = clients[lang]
-					found = true
-					break
-				}
+		for _, lang := range langs {
+			if lang == lowerText {
+				client = clients[lang]
+				found = true
+				break
 			}
+		}
 
-			if !found {
-				client = clients[defaultLanguage]
-				search = splitString[0] + " " + search
-			}
+		if !found {
+			client = clients[defaultLanguage]
+			search = splitString[0] + " " + search
+		}
 
-			parameters := defaultParameters
-			parameters["gsrsearch"] = search
+		parameters := defaultParameters
+		parameters["gsrsearch"] = strings.TrimSpace(search)
 
-			resp, err := client.Get(parameters)
+		resp, err := client.Get(parameters)
+
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		pages, err := resp.GetObjectArray("query", "pages")
+
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		results := make(tb.Results, len(pages))
+
+		for id, value := range pages {
+			title, err := value.GetString("title")
 
 			if err != nil {
 				log.Println(err)
 				return
 			}
 
-			pages, err := resp.GetObjectArray("query", "pages")
+			url, err := value.GetString("fullurl")
 
 			if err != nil {
 				log.Println(err)
 				return
 			}
 
-			results := make(tb.Results, len(pages))
-
-			for id, value := range pages {
-				title, err := value.GetString("title")
-
-				if err != nil {
-					log.Println(err)
-					return
-				}
-
-				url, err := value.GetString("fullurl")
-
-				if err != nil {
-					log.Println(err)
-					return
-				}
-
-				result := &tb.ArticleResult{
-					HideURL: true,
-					Text:    url,
-					Title:   title,
-					URL:     url,
-				}
-
-				result.SetResultID(strconv.Itoa(id))
-
-				results[id] = result
+			result := &tb.ArticleResult{
+				HideURL: true,
+				Text:    url,
+				Title:   title,
+				URL:     url,
 			}
 
-			err = bot.Answer(q, &tb.QueryResponse{
-				Results:   results,
-				CacheTime: 600,
-			})
+			result.SetResultID(strconv.Itoa(id))
 
-			if err != nil {
-				log.Println(err)
-			}
+			results[id] = result
+		}
+
+		err = bot.Answer(q, &tb.QueryResponse{
+			Results:   results,
+			CacheTime: 600,
+		})
+
+		if err != nil {
+			log.Println(err)
 		}
 	})
 
