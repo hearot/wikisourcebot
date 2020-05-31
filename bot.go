@@ -82,6 +82,10 @@ func main() {
 	})
 
 	bot.Handle(tb.OnQuery, func(q *tb.Query) {
+		if strings.TrimSpace(q.Text) == "" {
+			return
+		}
+
 		splitString := strings.SplitN(q.Text, " ", 2)
 
 		var client *mwclient.Client
