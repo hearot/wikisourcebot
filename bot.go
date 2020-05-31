@@ -38,7 +38,26 @@ const (
 	token           = ""
 )
 
-var langs = [...]string{"ar", "de", "en", "es", "he", "it", "pl", "ru", "zh"}
+var langs = [...]string{"aat", "ab", "ady", "ae", "af", "akk", "an", "ar", "arn", "arp", "as",
+						"ast", "az", "ba", "bal", "ban", "bar", "be", "bem", "bg", "bm", "bn",
+						"bo", "br", "brx", "bs", "ca", "cdo", "chr", "chu", "cnr", "co", "cop",
+						"cpx", "cs", "csb", "cu", "cv", "cy", "da", "de", "diq", "dsb", "egy",
+						"el", "en", "eo", "es", "et", "eu", "ext", "fa", "fi", "fo", "fr", "frr",
+						"fur", "fy", "ga", "gag", "gd", "gl", "gld", "got", "grc", "gsw", "gu",
+						"gv", "hak", "haw", "he", "hi", "hr", "hsb", "ht", "hu", "hy", "ia", "id",
+						"io", "is", "ist", "it", "iu", "ja", "jbo", "jct", "jv", "ka", "kk", "km",
+						"kn", "ko", "koi", "krl", "ku", "kw", "ky", "la", "lad", "lb", "les", "lg",
+						"li", "lij", "lis", "liv", "lld", "lmo", "ln", "lo", "lra", "lt", "lv",
+						"lzh", "mai", "mas", "mdf", "mfe", "mg", "mh", "mhr", "mi", "min", "mk",
+						"ml", "mn", "mnc", "mnp", "mr", "mrj", "ms", "mwl", "my", "myv", "nah",
+						"nan", "nds", "ne", "ng", "nl", "no", "non", "nrn", "nv", "oc", "olo",
+						"osx", "ota", "pa", "pau", "pcd", "pdt", "peo", "pfl", "pi", "pl", "pms",
+						"pnb", "pnt", "pox", "ps", "pt", "qu", "rm", "rml", "ro", "ru", "ruo",
+						"rup", "ryu", "sa", "sah", "sc", "scn", "sco", "se", "see", "sh", "si",
+						"sjd", "sjk", "sjo", "sk", "sl", "slr", "sn", "sq", "sr", "stq", "su",
+						"suk", "sv", "sw", "ta", "tah", "te", "tet", "tg", "th", "tl", "tpn",
+						"tr", "tt", "txg", "udm", "ug", "uk", "ur", "uz", "vec", "vep", "vi",
+						"vo", "wa", "wym", "xh", "xmf", "yi", "yue", "zh", "zu"}
 
 var clients map[string]*mwclient.Client
 
